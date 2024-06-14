@@ -1,0 +1,89 @@
+@media screen and (max-width:992px) {
+    #navbar {
+        padding: 10px 0px;
+    }
+    #profile {
+        height: 100vh;
+    }
+    #profile-image {
+        width: 60%;
+    }
+    #scroll1,#scroll2 {
+        display: none;
+    }
+    .navbar-brand {
+        margin-left: 50px;
+    }
+    .navbar-nav li {
+        margin-left: 20px;
+    }
+    #about-body {
+        height: 190vh;
+    }
+    #about-image {
+        padding-bottom: 20px;
+    }
+    #about-content {
+        padding: 0px;
+        padding-top: 20px;
+    }
+    #skill-body {
+        height: 190vh;
+    }
+    .icon-body {
+        margin: 10px 0px;
+    }
+    #contact-icons {
+        flex-direction: column;
+    }
+    .navbar-nav li a:hover .left-to-right {
+        width: 40%;
+    }
+    .left-to-right {
+        position: absolute;
+        left: 0px;
+        bottom: 0;
+        height: 5px;
+        background-color: var(--third-heading);
+        width: 0%;
+        transition: all .3s;
+    }
+    #img-content {
+        font-size: 20px;
+    }
+}
+@media screen and (max-width:400px) {
+    #third {
+        font-size: 20px;
+    }
+    #profile {
+        height: 90vh;
+    }
+    #profile-image {
+        width: 80%;
+    }
+    #navbar {
+        width: 102%;
+    }
+    #about-body {
+        height: 170vh;
+    }
+    #about-image {
+        padding-bottom: 30px;
+    }
+    #skill-body {
+        height: 200vh;
+    }
+    #bottom-nav a {
+        font-size: 15px;
+    }
+    .navbar-brand {
+        font-size: 25px;
+    }
+    .navbar-nav li a{
+        font-size: 20px;
+    }
+    #img-content {
+        font-size: 15px;
+    }
+}
