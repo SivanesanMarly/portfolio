@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import {
-  achievements,
   certifications,
   education,
   highlights,
@@ -12,7 +12,18 @@ import {
 import { ExperienceCards } from "./ExperienceCards";
 import { ProjectsCarousel } from "./ProjectsCarousel";
 
-const headerRoles = ["Full Stack Web Developer", "Mobile App Developer"];
+const headerRoles = ["Full Stack Engineer", "Mobile App Engineer"];
+const LiveLocationMap = dynamic(
+  () => import("./LiveLocationMap").then((module) => module.LiveLocationMap),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="live-map-loading">
+        Loading live map...
+      </div>
+    ),
+  },
+);
 
 export function PortfolioPage() {
   const [showHeader, setShowHeader] = useState(true);
@@ -144,16 +155,16 @@ export function PortfolioPage() {
         <section className="hero-section grid items-start gap-10 pb-20 pt-28 sm:gap-12 sm:pb-24 sm:pt-32 lg:grid-cols-[1.2fr_0.8fr] lg:gap-14 lg:pt-36">
           <div className="hero-copy animate-rise">
             <p className="hero-badge mb-5 inline-flex rounded-full border border-[var(--panel-border)] bg-[var(--soft-surface)] px-4 py-2 text-xs uppercase tracking-[0.3em] text-[var(--accent-2)]">
-              Full stack apps. Mobile experiences. Scalable products.
+              Product-minded engineering. Reliable delivery. Measurable impact.
             </p>
             <h1 className="font-display max-w-4xl text-4xl leading-[1] font-semibold tracking-tight text-[var(--heading)] sm:text-6xl lg:text-7xl">
-              Building full stack and mobile products that feel modern, fast,
-              and user-focused.
+              I build high-performance web and mobile products that solve real
+              business problems.
             </h1>
             <p className="hero-description mt-6 max-w-2xl text-base leading-8 text-[var(--text)] sm:text-lg lg:text-xl">
-              Full Stack Developer with experience delivering scalable web
-              applications, real-time mobile products, product-focused interfaces,
-              and ERP systems using Next.js, Flutter, Python, and PostgreSQL.
+              Full Stack Developer delivering scalable web applications,
+              real-time mobile experiences, and production-grade ERP systems
+              using Next.js, Flutter, Python, and PostgreSQL.
             </p>
 
             <div className="hero-actions mt-8 flex flex-wrap gap-3">
@@ -190,7 +201,7 @@ export function PortfolioPage() {
                 </div>
                 <div className="stat-card">
                   <span>Focus Areas</span>
-                  <strong>Web Development, Mobile Apps, Product UI</strong>
+                  <strong>Web Platforms, Mobile Apps, and Product UX</strong>
                 </div>
                 <div className="stat-card">
                   <span>Core Stack</span>
@@ -202,10 +213,9 @@ export function PortfolioPage() {
                   Objective
                 </p>
                 <p className="mt-3 text-base leading-7 text-[var(--text)]">
-                  Passionate about creating attractive, user-friendly, and
-                  high-performance digital products where clean interfaces,
-                  reliable backend systems, and thoughtful user experience come
-                  together.
+                  Build software that is fast, reliable, and genuinely useful.
+                  I focus on clean architecture, intuitive interfaces, and
+                  backend systems that scale with confidence.
                 </p>
               </div>
             </div>
@@ -215,23 +225,23 @@ export function PortfolioPage() {
         <section className="section-shell animate-rise-delayed">
           <div className="section-heading">
             <p>About</p>
-            <h2>Experience-driven personal presentation</h2>
+            <h2>Engineering with ownership, clarity, and impact</h2>
           </div>
           <div className="about-grid grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
             <article className="glass-card content-card p-6 sm:p-8">
               <p className="text-base leading-8 text-[var(--text)] sm:text-lg">
-                I design and develop scalable web and mobile products with a
-                strong focus on usability, performance, secure access control,
-                and real-time workflows. My recent work spans mapping
-                solutions, mobile platforms, and school ERP products where
-                both technical reliability and user clarity matter.
+                I design and ship scalable web and mobile products with strong
+                attention to usability, performance, security, and long-term
+                maintainability. My work spans geospatial systems, ecommerce,
+                real-time mobile platforms, and ERP products used in daily
+                operations.
               </p>
             </article>
             <article className="glass-card content-card p-6 sm:p-8">
               <div className="grid gap-x-6 gap-y-5 text-sm text-[var(--text)] sm:grid-cols-2">
                 <div>
                   <p className="label">Based In</p>
-                  <p className="value">Trichy, Tamil Nadu</p>
+                  <p className="value">Edamalaipatti Pudur, Trichy, Tamil Nadu</p>
                 </div>
                 <div>
                   <p className="label">Phone</p>
@@ -253,7 +263,7 @@ export function PortfolioPage() {
         <section id="experience" className="section-shell">
           <div className="section-heading">
             <p>Experience</p>
-            <h2>Real work that shows ownership and impact</h2>
+            <h2>Execution that delivers measurable product value</h2>
           </div>
           <ExperienceCards />
         </section>
@@ -271,7 +281,7 @@ export function PortfolioPage() {
         <section id="skills" className="section-shell">
           <div className="section-heading">
             <p>Skills</p>
-            <h2>Showcasing the tools and strengths behind my development work</h2>
+            <h2>Capabilities that turn ideas into production-ready products</h2>
           </div>
           <div className="skills-grid grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
             {skillGroups.map((group) => (
@@ -327,37 +337,63 @@ export function PortfolioPage() {
             <article className="glass-card content-card p-6 sm:p-8">
               <div className="section-heading mb-6">
                 <p>Recognition</p>
-                <h2>Achievements and certifications</h2>
+                <h2>Professional Certifications</h2>
               </div>
-              <div className="space-y-6">
-                <div>
-                  <p className="text-sm uppercase tracking-[0.24em] text-[var(--muted)]">
-                    Achievements
-                  </p>
-                  <ul className="mt-4 space-y-3">
-                    {achievements.map((item) => (
-                      <li key={item} className="feature-row text-[var(--text)]">
-                        <span className="feature-dot" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <p className="text-sm uppercase tracking-[0.24em] text-[var(--muted)]">
-                    Certifications
-                  </p>
-                  <ul className="mt-4 space-y-3">
-                    {certifications.map((item) => (
-                      <li key={item} className="feature-row text-[var(--text)]">
-                        <span className="feature-dot" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <div>
+                <p className="text-sm uppercase tracking-[0.24em] text-[var(--muted)]">
+                  Certifications
+                </p>
+                <ul className="mt-4 space-y-3">
+                  {certifications.map((item) => (
+                    <li key={item} className="feature-row text-[var(--text)]">
+                      <span className="feature-dot" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </article>
+          </div>
+        </section>
+
+        <section id="proposal" className="section-shell">
+          <div className="proposal-panel rounded-[2rem] p-6 sm:p-8 lg:p-10">
+            <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+              <div>
+                <p className="text-sm uppercase tracking-[0.3em] text-[var(--accent-2)]">
+                  Work Proposal
+                </p>
+                <h2 className="mt-3 font-display text-4xl leading-tight text-[var(--heading)] sm:text-5xl">
+                  If it matters to your business, I can turn it into a reliable
+                  product.
+                </h2>
+                <p className="mt-4 max-w-2xl text-base leading-8 text-[var(--text)] sm:text-lg">
+                  I bring strong confidence, fast learning, and disciplined
+                  execution. From discovery to deployment, I solve complex
+                  problems with clarity, communicate proactively, and deliver
+                  outcomes that are stable, scalable, and user-centered.
+                </p>
+              </div>
+              <div className="proposal-points rounded-[1.5rem] p-5 sm:p-6">
+                <p className="text-sm uppercase tracking-[0.24em] text-[var(--muted)]">
+                  What You Can Expect
+                </p>
+                <ul className="mt-4 space-y-3">
+                  <li className="feature-row text-[var(--text)]">
+                    <span className="feature-dot" />
+                    <span>End-to-end ownership from planning to production release.</span>
+                  </li>
+                  <li className="feature-row text-[var(--text)]">
+                    <span className="feature-dot" />
+                    <span>Smart technical decisions aligned with business priorities.</span>
+                  </li>
+                  <li className="feature-row text-[var(--text)]">
+                    <span className="feature-dot" />
+                    <span>Consistent quality, speed, and accountability in delivery.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -369,35 +405,67 @@ export function PortfolioPage() {
                   Contact
                 </p>
                 <h2 className="mt-3 font-display text-4xl leading-tight text-[var(--heading)] sm:text-5xl">
-                  Let&apos;s build something reliable, useful, and visually
-                  strong.
+                  Let&apos;s build your next product with speed, quality, and
+                  confidence.
                 </h2>
                 <p className="mt-4 max-w-2xl text-base leading-8 text-[var(--text)] sm:text-lg">
-                  Open to full stack and mobile development opportunities where
-                  secure systems, product quality, and user experience matter.
+                  Open to full stack and mobile opportunities where product
+                  quality, secure architecture, and great user experience are
+                  non-negotiable.
                 </p>
               </div>
-              <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+              <div className="contact-actions">
                 <a className="button-primary" href="mailto:sivanesan8113@gmail.com">
-                  sivanesan8113@gmail.com
+                  Email for Project Work
                 </a>
-                <a
-                  className="button-secondary"
-                  href="https://github.com/SivanesanMarly"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  GitHub Profile
-                </a>
-                <a
-                  className="button-secondary"
-                  href="https://www.linkedin.com/in/sivanesan-a-224a0928a"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  LinkedIn Profile
+                <a className="button-secondary" href="tel:+916379375144">
+                  Call: +91 63793 75144
                 </a>
               </div>
+            </div>
+            <div className="contact-detail-grid mt-8">
+              <article className="contact-detail-card">
+                <p className="contact-detail-label">Project Work Email</p>
+                <a className="contact-detail-value" href="mailto:sivanesan8113@gmail.com">
+                  sivanesan8113@gmail.com
+                </a>
+              </article>
+              <article className="contact-detail-card">
+                <p className="contact-detail-label">Project Work Phone</p>
+                <a className="contact-detail-value" href="tel:+916379375144">
+                  +91 63793 75144
+                </a>
+              </article>
+              <article className="contact-detail-card">
+                <p className="contact-detail-label">Live Location</p>
+                <p className="contact-detail-note">
+                  Edamalaipatti Pudur, Trichy.
+                </p>
+              </article>
+              <article className="contact-detail-card">
+                <p className="contact-detail-label">Profiles</p>
+                <div className="contact-links-row">
+                  <a
+                    className="contact-inline-link"
+                    href="https://github.com/SivanesanMarly"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    GitHub
+                  </a>
+                  <a
+                    className="contact-inline-link"
+                    href="https://www.linkedin.com/in/sivanesan-a-224a0928a"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    LinkedIn
+                  </a>
+                </div>
+              </article>
+            </div>
+            <div className="mt-8">
+              <LiveLocationMap />
             </div>
           </div>
         </section>

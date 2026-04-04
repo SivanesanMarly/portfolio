@@ -44,20 +44,20 @@ export const experiences: Experience[] = [
     location: "Remote",
     accent: "from-[#ffb36a] to-[#ff6a88]",
     points: [
-      "Building modern mobile applications with real-time features and smooth user flows.",
-      "Creating cross-platform Flutter apps backed by scalable APIs and strong backend integrations.",
-      "Improving backend performance and delivering reliable product experiences across platforms.",
+      "Delivered modern mobile applications with real-time capabilities and smooth, conversion-focused user flows.",
+      "Built cross-platform Flutter apps powered by scalable APIs and resilient backend integrations.",
+      "Improved backend performance and released reliable experiences across web and mobile platforms.",
     ],
     projects: [
       {
         title: "Ecommerce Mobile App",
         summary:
-          "Built a modern ecommerce mobile application with product browsing, cart and checkout flows and responsive user-focused experiences backed by scalable APIs.",
+          "Engineered an ecommerce mobile app with robust catalog browsing, cart and checkout journeys, and scalable API integrations for consistent performance.",
       },
       {
         title: "School Management ERP",
         summary:
-          "Developed a complete web and mobile ERP for schools with attendance, exams, fees, dashboards, QR-based attendance, Firebase notifications, and Razorpay-powered payment support.",
+          "Developed a complete web and mobile ERP platform for schools with attendance, exams, fees, dashboards, QR-based check-ins, Firebase notifications, and Razorpay payments.",
       },
     ],
     stack: ["Flutter", "Next.js", "Django", "Flask", "PostgreSQL", "Firebase", "Razorpay"],
@@ -69,15 +69,15 @@ export const experiences: Experience[] = [
     location: "Chennai / On-site at DGIS, Delhi",
     accent: "from-[#7ef7c8] to-[#3aa5ff]",
     points: [
-      "Developed secure web applications focused on scalability, reliability, and real-time processing.",
-      "Built Angular frontends, Flask APIs, RBAC systems, and advanced data-driven workflows using GeoServer and Leaflet.",
-      "Optimized PostgreSQL performance and deployed services in Virtual Box environments.",
+      "Built secure web applications focused on scalability, stability, and real-time processing.",
+      "Implemented Angular frontends, Flask APIs, RBAC modules, and spatial workflows with GeoServer and Leaflet.",
+      "Optimized PostgreSQL performance and supported dependable deployments in Virtual Box environments.",
     ],
     projects: [
       {
         title: "Geospatial Web Application",
         summary:
-          "Built a secure and scalable web platform with live mapping, analytics, role-based access control, GeoServer integration, and reliable deployment support for multi-user workflows.",
+          "Built a secure, scalable geospatial platform with live mapping, analytics, role-based access control, GeoServer integration, and reliable support for multi-user workflows.",
       },
     ],
     stack: ["Angular", "Flask", "PostgreSQL", "GeoServer", "Leaflet", "REST APIs", "Unity"],
@@ -85,9 +85,9 @@ export const experiences: Experience[] = [
 ];
 
 export const highlights = [
-  "1+ year building secure full stack and mobile products",
-  "ERP, ecommerce, and real-time application development experience",
-  "Strong stack across Next.js, Flutter, Python, PostgreSQL, and APIs",
+  "1+ year delivering secure full stack and mobile products in production",
+  "Hands-on experience across ERP, ecommerce, and real-time systems",
+  "Strong execution with Next.js, Flutter, Python, PostgreSQL, and APIs",
 ];
 
 export const skillGroups: SkillGroup[] = [
@@ -95,7 +95,7 @@ export const skillGroups: SkillGroup[] = [
     title: "Frontend",
     label: "UI Engineering",
     description:
-      "Building responsive interfaces that feel clean, fast, and easy to use across modern web applications.",
+      "Crafting responsive interfaces that feel polished, intuitive, and fast across modern web products.",
     accent: "from-[#ffb86c] via-[#ff8f6b] to-[#ff6d88]",
     items: ["HTML", "CSS", "JavaScript", "Angular", "React", "Next.js"],
   },
@@ -103,7 +103,7 @@ export const skillGroups: SkillGroup[] = [
     title: "Backend",
     label: "API & Logic",
     description:
-      "Designing scalable backend workflows, business logic, and secure integrations for real-world products.",
+      "Designing scalable backend services, business logic, and secure integrations for production systems.",
     accent: "from-[#61d6ff] via-[#4fa6ff] to-[#5f7bff]",
     items: ["Python", "Flask", "FastAPI", "Django", "REST API Design"],
   },
@@ -111,7 +111,7 @@ export const skillGroups: SkillGroup[] = [
     title: "Data & Mobile",
     label: "Cross-Platform Delivery",
     description:
-      "Creating mobile-ready experiences with strong data handling, notifications, and payment-connected features.",
+      "Building mobile-ready products with strong data handling, notifications, and payment workflows.",
     accent: "from-[#62e6c2] via-[#35c7a4] to-[#1ba084]",
     items: ["PostgreSQL", "MySQL", "Flutter", "Firebase", "Razorpay"],
   },
@@ -119,7 +119,7 @@ export const skillGroups: SkillGroup[] = [
     title: "Specialties",
     label: "Advanced Workflows",
     description:
-      "Handling access control, optimization, integrations, and delivery practices for complex applications.",
+      "Driving access control, optimization, integrations, and delivery practices for complex applications.",
     accent: "from-[#ffd36c] via-[#f3a34c] to-[#de7c3a]",
     items: ["GeoServer", "Leaflet", "RBAC", "Performance Optimization", "Agile / Scrum"],
   },
@@ -130,43 +130,43 @@ export const projects: Project[] = [
     title: "Geospatial Web Application",
     category: "Web Platform",
     description:
-      "Secure mapping platform with live visualization, GeoServer, Leaflet, and role-based access.",
+      "Enterprise-ready mapping platform with live visualization, GeoServer, Leaflet, and role-based access.",
     tags: ["Angular", "Flask", "Leaflet"],
   },
   {
     title: "Simulation & Training System",
     category: "Realtime System",
-    description: "Real-time training platform with Unity integration and live analytics APIs.",
+    description: "Real-time training platform with Unity integration, telemetry, and live analytics APIs.",
     tags: ["Unity", "Realtime APIs", "Analytics"],
   },
   {
     title: "Mobile Mapping Application",
     category: "Mobile App",
-    description: "Cross-platform mobile app with real-time tracking and strong API support.",
+    description: "Cross-platform mobile app with real-time tracking, location intelligence, and robust API support.",
     tags: ["Flutter", "Tracking", "APIs"],
   },
   {
     title: "Ecommerce Mobile App",
     category: "Commerce",
-    description: "Ecommerce app with product listing, cart, checkout, and supplier management features.",
+    description: "Commerce app with product catalog, cart, checkout, and supplier management workflows.",
     tags: ["Checkout", "Payments", "Flutter"],
   },
   {
     title: "School Management ERP",
     category: "ERP Product",
-    description: "School ERP with attendance, exams, dashboards, QR check-in, and payments.",
+    description: "School ERP with attendance, exams, dashboards, QR check-ins, and fee payment workflows.",
     tags: ["ERP", "QR Attendance", "Dashboards"],
   },
   {
     title: "IoT Forest Fire Detection System",
     category: "IoT Solution",
-    description: "IoT fire detection system with sensors, computer vision, and early alerts.",
+    description: "IoT wildfire detection system using sensors, computer vision, and real-time early alerts.",
     tags: ["IoT", "Computer Vision", "Alerts"],
   },
   {
     title: "Personal Website",
     category: "Showcase Site",
-    description: "Responsive personal site focused on polished UI and clear project presentation.",
+    description: "Responsive personal brand site focused on polished UI, storytelling, and clear project presentation.",
     tags: ["Next.js", "UI Design", "Responsive"],
   },
 ];
@@ -200,5 +200,5 @@ export const education: EducationItem[] = [
 
 export const certifications = [
   "Full Stack Development (MEAN Stack) - Livewire, Trichy",
-  "Python & Core Java - Livewire, Trichy",
+  "Python and Core Java - Livewire, Trichy",
 ];
