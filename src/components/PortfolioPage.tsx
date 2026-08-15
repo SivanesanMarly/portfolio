@@ -1,35 +1,125 @@
+// src/components/PortfolioPage.tsx
+
 "use client";
 
-import Link from "next/link";
-import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
 import {
   certifications,
   education,
   highlights,
   skillGroups,
 } from "@/data/portfolio";
+
 import { ExperienceCards } from "./ExperienceCards";
-import { ProjectsCarousel } from "./ProjectsCarousel";
-
-const headerRoles = ["Full Stack Engineer", "Mobile App Engineer"];
-
-const LiveLocationMap = dynamic(
-  () => import("./LiveLocationMap").then((module) => module.LiveLocationMap),
-  {
-    ssr: false,
-    loading: () => <div className="live-map-loading">Loading live map...</div>,
-  },
-);
+import { ProjectsGrid } from "./ProjectsGrid";
+import { Background3D } from "./Background3D";
+import { LiveLocationMap } from "./LiveLocationMap";
 
 export function PortfolioPage() {
   const [showHeader, setShowHeader] = useState(true);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [headerRoleIndex, setHeaderRoleIndex] = useState(0);
-  const [headerTypedText, setHeaderTypedText] = useState("");
-  const [headerDeleting, setHeaderDeleting] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [headerTypedText, setHeaderTypedText] = useState("Full Stack Engineer");
+  const lastScrollY = useRef(0);
 
+  // Scroll handler
   useEffect(() => {
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+        const scrollingDown = currentScrollY > lastScrollY.current;
+        const nearTop = currentScrollY < 32;
+
+        setShowHeader(nearTop || !scrollingDown || isMobileMenuOpen);
+        setShowScrollTop(currentScrollY > 500);
+        lastScrollY.current = currentScrollY;
+        ticking = false;
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isMobileMenuOpen]);
+
+  // Typewriter effect
+  useEffect(() => {
+    const roles = [
+      "Full Stack Engineer",
+      "Mobile App Engineer",
+    ];
+
+    let roleIndex = 0;
+    let charIndex = roles[0].length;
+    let deleting = true;
+    let timer: number;
+
+    const runTypewriter = () => {
+      const currentRole = roles[roleIndex];
+
+      if (!deleting) {
+        charIndex++;
+        setHeaderTypedText(currentRole.slice(0, charIndex));
+
+        if (charIndex >= currentRole.length) {
+          deleting = true;
+          timer = window.setTimeout(runTypewriter, 1400);
+          return;
+        }
+
+        timer = window.setTimeout(runTypewriter, 75);
+        return;
+      }
+
+      charIndex--;
+      setHeaderTypedText(currentRole.slice(0, charIndex));
+
+      if (charIndex <= 0) {
+        deleting = false;
+        roleIndex = (roleIndex + 1) % roles.length;
+        timer = window.setTimeout(runTypewriter, 350);
+        return;
+      }
+
+      timer = window.setTimeout(runTypewriter, 40);
+    };
+
+    timer = window.setTimeout(runTypewriter, 500);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, []);
+
+  // Scroll reveal animation (fixed for mobile)
+  useEffect(() => {
+    const elements = document.querySelectorAll<HTMLElement>("[data-animate]");
+    const isMobile = window.innerWidth < 768;
+
+    // Show all elements on mobile immediately
+    if (isMobile) {
+      elements.forEach((element) => {
+        element.classList.add("is-visible");
+        element.style.opacity = "1";
+        element.style.transform = "none";
+      });
+      return;
+    }
+
+    if (!("IntersectionObserver" in window)) {
+      elements.forEach((element) => {
+        element.classList.add("is-visible");
+        element.style.opacity = "1";
+        element.style.transform = "none";
+      });
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -39,109 +129,44 @@ export function PortfolioPage() {
           }
         });
       },
-      { threshold: 0, rootMargin: "0px 0px -10% 0px" }
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -5% 0px",
+      }
     );
 
-    const elements = document.querySelectorAll("[data-animate]");
-    elements.forEach((el) => observer.observe(el));
+    elements.forEach((element) => observer.observe(element));
 
     return () => observer.disconnect();
   }, []);
 
-    useEffect(() => {
-    const savedTheme = window.localStorage.getItem("portfolio-theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initialTheme = savedTheme === "dark" || savedTheme === "light" ? savedTheme : prefersDark ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", initialTheme);
-
-    let ticking = false;
-    let lastScrollY = window.scrollY;
-
-    const handleScroll = () => {
-      lastScrollY = window.scrollY;
-      if (ticking) return;
-      
-      ticking = true;
-      requestAnimationFrame(() => {
-        const currentScrollY = lastScrollY;
-        
-        // Safely get the previous scroll position, defaulting to current if undefined
-        const previousScrollY = (window as any)._lastScrollY ?? currentScrollY;
-        const scrollingDown = currentScrollY > previousScrollY;
-        const nearTop = currentScrollY < 32;
-
-        setShowHeader(nearTop || !scrollingDown);
-        setShowScrollTop(currentScrollY > 500);
-        
-        // Store the current scroll position for the next event
-        (window as any)._lastScrollY = currentScrollY;
-        ticking = false;
-      });
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const currentRole = headerRoles[headerRoleIndex];
-    const completed = headerTypedText === currentRole;
-    const cleared = headerTypedText === "";
-
-    const timeoutId = window.setTimeout(
-      () => {
-        if (!headerDeleting) {
-          const nextText = currentRole.slice(0, headerTypedText.length + 1);
-          setHeaderTypedText(nextText);
-          if (nextText === currentRole) setHeaderDeleting(true);
-          return;
-        }
-
-        const nextText = currentRole.slice(0, Math.max(headerTypedText.length - 1, 0));
-        setHeaderTypedText(nextText);
-
-        if (cleared) {
-          setHeaderDeleting(false);
-          setHeaderRoleIndex((current) => (current + 1) % headerRoles.length);
-        }
-      },
-      !headerDeleting ? (completed ? 1200 : 70) : 35,
-    );
-
-    return () => window.clearTimeout(timeoutId);
-  }, [headerDeleting, headerRoleIndex, headerTypedText]);
-
-  const toggleTheme = () => {
-    const currentTheme = document.documentElement.getAttribute("data-theme");
-    const nextTheme = currentTheme === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", nextTheme);
-    window.localStorage.setItem("portfolio-theme", nextTheme);
-  };
-
   return (
-    <main className="relative bg-[var(--background)] text-[var(--foreground)]">
-      
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="page-surface absolute inset-0" />
-        <div className="orb orb-one" />
-        <div className="orb orb-two" />
-        <div className="orb orb-three" />
-        <div className="grid-overlay absolute inset-0" />
+    <main className="relative text-[var(--foreground)]">
+      {/* Background */}
+      <div className="portfolio-background" aria-hidden="true">
+        <Background3D />
+        <div className="portfolio-background-grid" />
+        <div className="portfolio-background-glow" />
       </div>
 
+      {/* Main Content */}
       <div className="site-shell relative z-20 mx-auto flex min-h-screen w-full max-w-7xl flex-col px-5 pb-24 pt-6 sm:px-8 lg:px-10">
+        {/* Header */}
         <header
-          className={`glass-panel fixed left-1/2 top-4 z-30 flex w-[calc(100%-2.5rem)] max-w-6xl -translate-x-1/2 items-center justify-between gap-4 rounded-full px-4 py-3.5 transition-opacity duration-300 sm:w-[calc(100%-4rem)] sm:px-5 lg:w-[calc(100%-5rem)] lg:px-6 ${
+          className={`site-header glass-panel fixed left-1/2 top-4 z-30 flex -translate-x-1/2 items-center justify-between gap-3 rounded-full px-4 py-3.5 transition-opacity duration-300 sm:px-5 lg:px-6 ${
             showHeader ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
         >
           <div className="header-brand">
-            <p className="font-display text-xs uppercase tracking-[0.35em] text-[var(--muted)] sm:text-sm">Sivanesan A</p>
+            <p className="font-display text-xs uppercase tracking-[0.35em] text-[var(--muted)] sm:text-sm">
+              Sivanesan A
+            </p>
             <p className="header-typewriter text-xs text-[var(--soft-text)] sm:text-sm">
               <span>{headerTypedText}</span>
               <span className="header-typewriter-caret" aria-hidden="true" />
             </p>
           </div>
+
           <div className="header-actions">
             <nav className="hidden items-center gap-1 text-sm text-[var(--soft-text)] md:flex">
               <a href="#experience" className="nav-link">Experience</a>
@@ -149,13 +174,34 @@ export function PortfolioPage() {
               <a href="#skills" className="nav-link">Skills</a>
               <a href="#contact" className="nav-link">Contact</a>
             </nav>
-            <button type="button" onClick={toggleTheme} className="theme-toggle" aria-label="Toggle site theme">
-              <span className="theme-toggle-track"><span className="theme-toggle-thumb" /></span>
-              <span className="hidden text-sm text-[var(--soft-text)] sm:inline">Theme</span>
+
+            <button
+              type="button"
+              className={`mobile-menu-toggle ${isMobileMenuOpen ? "is-open" : ""}`}
+              onClick={() => setIsMobileMenuOpen((isOpen) => !isOpen)}
+              aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation"
+            >
+              <span />
+              <span />
+              <span />
             </button>
           </div>
+
+          <nav
+            id="mobile-navigation"
+            className={`mobile-navigation ${isMobileMenuOpen ? "is-open" : ""}`}
+            aria-label="Mobile navigation"
+          >
+            <a href="#experience" onClick={() => setIsMobileMenuOpen(false)}>Experience</a>
+            <a href="#projects" onClick={() => setIsMobileMenuOpen(false)}>Projects</a>
+            <a href="#skills" onClick={() => setIsMobileMenuOpen(false)}>Skills</a>
+            <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>Contact</a>
+          </nav>
         </header>
 
+        {/* Hero Section */}
         <section className="hero-section grid items-start gap-10 pb-20 pt-28 sm:gap-12 sm:pb-24 sm:pt-32 lg:grid-cols-[1.2fr_0.8fr] lg:gap-14 lg:pt-36">
           <div className="hero-copy">
             <p className="hero-badge mb-5 inline-flex rounded-full border border-[var(--panel-border)] bg-[var(--soft-surface)] px-4 py-2 text-xs uppercase tracking-[0.3em] text-[var(--accent-2)]">
@@ -171,23 +217,23 @@ export function PortfolioPage() {
               <a className="button-primary" href="#contact">Let&apos;s Work Together</a>
               <a className="button-secondary" href="#experience">View Experience</a>
             </div>
-            <div className="hero-highlights mt-12 grid gap-4 sm:grid-cols-3">
+            <div className="hero-highlights mt-12 grid gap-4 sm:grid-cols-3 stagger perspective-1000">
               {highlights.map((item) => (
-                <article key={item} className="glass-card hero-highlight-card px-5 py-5">
+                <article key={item} className="glass-card hero-highlight-card tilt-3d px-5 py-5" data-animate>
                   <p className="text-sm leading-6 text-[var(--text)]">{item}</p>
                 </article>
               ))}
             </div>
           </div>
 
-          <aside className="hero-aside">
-            <div className="hero-card rounded-[2rem] p-6 sm:p-8">
+          <aside className="hero-aside perspective-1000">
+            <div className="hero-card tilt-3d rounded-[2rem] p-6 sm:p-8" data-animate>
               <div className="flex items-center justify-between">
                 <p className="font-display text-2xl text-[var(--heading)]">Profile Snapshot</p>
                 <span className="status-pill">Available</span>
               </div>
               <div className="mt-8 space-y-5">
-                <div className="stat-card"><span>Experience</span><strong>1+ Year</strong></div>
+                <div className="stat-card"><span>Experience</span><strong>2+ Year</strong></div>
                 <div className="stat-card"><span>Focus Areas</span><strong>Web Platforms, Mobile Apps, and Product UX</strong></div>
                 <div className="stat-card"><span>Core Stack</span><strong>Next.js, Flutter, Python, PostgreSQL</strong></div>
               </div>
@@ -201,26 +247,28 @@ export function PortfolioPage() {
           </aside>
         </section>
 
+        {/* About Section */}
         <section className="section-shell about-section" data-animate>
           <div className="section-heading">
             <p>About</p>
             <h2>Engineering with ownership, clarity, and impact</h2>
           </div>
-          <div className="about-bento-grid">
-            <article className="about-card about-card-narrative">
-              <div className="about-quote-mark" aria-hidden="true">"</div>
+          <div className="about-bento-grid stagger perspective-1000">
+            <article className="about-card about-card-narrative tilt-3d">
+              <div className="about-quote-mark" aria-hidden="true">&ldquo;</div>
               <p className="about-narrative-text">
                 I design and ship <span className="text-highlight">scalable web and mobile products</span> with strong attention to usability, performance, security, and long-term maintainability. My work spans <span className="text-highlight">geospatial systems, ecommerce, real-time mobile platforms, and ERP products</span> used in daily operations.
               </p>
               <div className="about-signature">— Sivanesan A</div>
             </article>
-            <div className="about-info-chip about-chip-1"><span className="chip-label">Based In</span><span className="chip-value">Edamalaipatti Pudur, Trichy</span></div>
-            <div className="about-info-chip about-chip-2"><span className="chip-label">Phone</span><span className="chip-value">+91 63793 75144</span></div>
-            <div className="about-info-chip about-chip-3"><span className="chip-label">Email</span><span className="chip-value">sivanesan8113@gmail.com</span></div>
-            <div className="about-info-chip about-chip-4"><span className="chip-label">Strength</span><span className="chip-value">UI-focused engineering with backend depth</span></div>
+            <div className="about-info-chip about-chip-1 tilt-3d"><span className="chip-label">Based In</span><span className="chip-value">Edamalaipatti Pudur, Trichy</span></div>
+            <div className="about-info-chip about-chip-2 tilt-3d"><span className="chip-label">Phone</span><span className="chip-value">+91 63793 75144</span></div>
+            <div className="about-info-chip about-chip-3 tilt-3d"><span className="chip-label">Email</span><span className="chip-value">sivanesan8113@gmail.com</span></div>
+            <div className="about-info-chip about-chip-4 tilt-3d"><span className="chip-label">Strength</span><span className="chip-value">UI-focused engineering with backend depth</span></div>
           </div>
         </section>
 
+        {/* Experience Section */}
         <section id="experience" className="section-shell" data-animate>
           <div className="section-heading">
             <p>Experience</p>
@@ -229,6 +277,7 @@ export function PortfolioPage() {
           <ExperienceCards />
         </section>
 
+        {/* Projects Section */}
         <section id="projects" className="section-shell" data-animate>
           <div className="projects-header">
             <div className="section-heading mb-0">
@@ -236,17 +285,18 @@ export function PortfolioPage() {
               <h2>Selected work across web, mobile, and real-time systems</h2>
             </div>
           </div>
-          <ProjectsCarousel />
+          <ProjectsGrid />
         </section>
 
+        {/* Skills Section */}
         <section id="skills" className="section-shell" data-animate>
           <div className="section-heading">
             <p>Skills</p>
             <h2>Capabilities that turn ideas into production-ready products</h2>
           </div>
-          <div className="skills-grid grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
+          <div className="skills-grid stagger perspective-1000 grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
             {skillGroups.map((group) => (
-              <article key={group.title} className="skill-card h-full p-6">
+              <article key={group.title} className="skill-card tilt-3d h-full p-6">
                 <div className={`skill-card-glow bg-gradient-to-r ${group.accent}`} />
                 <div className="skill-card-top">
                   <div className="skill-icon">
@@ -266,9 +316,10 @@ export function PortfolioPage() {
           </div>
         </section>
 
+        {/* Education & Certifications */}
         <section className="section-shell" data-animate>
           <div className="info-grid grid gap-5 lg:grid-cols-2">
-            <article className="glass-card content-card p-6 sm:p-8">
+            <article className="glass-card content-card p-6 sm:p-8 tilt-3d">
               <div className="section-heading mb-6"><p>Education</p><h2>Academic background</h2></div>
               <div className="space-y-4">
                 {education.map((item) => (
@@ -285,7 +336,7 @@ export function PortfolioPage() {
                 ))}
               </div>
             </article>
-            <article className="glass-card content-card p-6 sm:p-8">
+            <article className="glass-card content-card p-6 sm:p-8 tilt-3d">
               <div className="section-heading mb-6"><p>Recognition</p><h2>Professional Certifications</h2></div>
               <div>
                 <p className="text-sm uppercase tracking-[0.24em] text-[var(--muted)]">Certifications</p>
@@ -299,8 +350,9 @@ export function PortfolioPage() {
           </div>
         </section>
 
+        {/* Work Proposal */}
         <section id="proposal" className="section-shell" data-animate>
-          <div className="proposal-panel rounded-[2rem] p-6 sm:p-8 lg:p-10">
+          <div className="proposal-panel tilt-3d rounded-[2rem] p-6 sm:p-8 lg:p-10">
             <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
               <div>
                 <p className="text-sm uppercase tracking-[0.3em] text-[var(--accent-2)]">Work Proposal</p>
@@ -319,14 +371,15 @@ export function PortfolioPage() {
           </div>
         </section>
 
+        {/* Contact Section */}
         <section id="contact" className="section-shell pb-0" data-animate>
           <div className="section-heading">
             <p>Contact</p>
             <h2>Let&apos;s build your next product with speed, quality, and confidence.</h2>
           </div>
 
-          <div className="contact-bento-layout">
-            <article className="contact-card-pitch">
+          <div className="contact-bento-layout perspective-1000">
+            <article className="contact-card-pitch tilt-3d">
               <div className="contact-pitch-glow" aria-hidden="true" />
               <p className="text-sm uppercase tracking-[0.3em] text-[var(--accent-2)] mb-4">Let&apos;s Connect</p>
               <h3 className="font-display text-3xl text-[var(--heading)] mb-4">Open to full stack and mobile opportunities.</h3>
@@ -337,7 +390,7 @@ export function PortfolioPage() {
               </div>
             </article>
 
-            <div className="contact-tile contact-tile-combined">
+            <div className="contact-tile contact-tile-combined tilt-3d">
               <div className="contact-tile-inner">
                 <div className="contact-section-block">
                   <span className="contact-tile-label">Live Location</span>
@@ -366,13 +419,14 @@ export function PortfolioPage() {
               </div>
             </div>
 
-            <div className="contact-map-wrapper">
+            <div className="contact-map-wrapper tilt-3d">
               <LiveLocationMap />
             </div>
           </div>
         </section>
       </div>
 
+      {/* Scroll to top button */}
       <button
         type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

@@ -1,3 +1,5 @@
+// src/data/portfolio.ts
+
 export type ExperienceProject = { title: string; summary: string; };
 export type Experience = { role: string; company: string; period: string; location: string; accent: string; points: string[]; projects: ExperienceProject[]; stack: string[]; };
 export type SkillGroup = { title: string; label: string; description: string; accent: string; items: string[]; };
@@ -41,7 +43,7 @@ export const experiences: Experience[] = [
 ];
 
 export const highlights = [
-  "1+ year delivering secure full stack and mobile products in production",
+  "2+ year delivering secure full stack and mobile products in production",
   "Hands-on experience across ERP, ecommerce, and real-time systems",
   "Strong execution with Next.js, Flutter, Python, PostgreSQL, and APIs",
 ];
